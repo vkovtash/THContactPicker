@@ -26,6 +26,7 @@
 @property (nonatomic, assign) BOOL limitToOne;
 @property (nonatomic, assign) CGFloat viewPadding;
 @property (nonatomic, strong) UIFont *font;
+@property (readwrite, nonatomic) UIColor *placeholderTextColor;
 
 - (void)addContact:(id)contact withName:(NSString *)name;
 - (void)removeContact:(id)contact;

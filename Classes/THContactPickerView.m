@@ -100,6 +100,14 @@
 
 #pragma mark - Public functions
 
+- (void) setPlaceholderTextColor:(UIColor *)placeholderColor {
+    self.placeholderLabel.textColor = placeholderColor;
+}
+
+- (UIColor *) placeholderTextColor {
+    return self.placeholderLabel.textColor;
+}
+
 - (void)disableDropShadow {
     CALayer *layer = [self layer];
     [layer setShadowRadius:0];
@@ -169,7 +177,6 @@
   
     self.textView.hidden = NO;
     self.textView.text = @"";
-  
 }
 
 - (void)removeContact:(id)contact {

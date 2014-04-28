@@ -10,7 +10,7 @@
 
 static const CGFloat kPickerViewHeight = 100.0;
 
-NSString *THContactPickerContactCellReuseID = @"THContactPickerContactCell";
+NSString *THContactPickerContactCellReuseID = @"THContactPickerContactCellReuseID";
 
 @interface THContactPickerViewController () <THContactPickerDelegate>
 @property (nonatomic, strong) NSMutableArray *privateSelectedContacts;
