@@ -90,9 +90,9 @@ NSString *THContactPickerContactCellReuseID = @"THContactPickerContactCellReuseI
 }
 
 - (void)adjustTableViewInsetTop:(CGFloat) topInset bottom:(CGFloat) bottomInset {
-    self.tableView.contentInset = UIEdgeInsetsMake(topInset,
+    self.tableView.contentInset = UIEdgeInsetsMake(topInset >= 0 ? topInset : 0,
                                                    self.tableView.contentInset.left,
-                                                   bottomInset,
+                                                   bottomInset >=0 ? bottomInset : 0,
                                                    self.tableView.contentInset.right);
     self.tableView.scrollIndicatorInsets = self.tableView.contentInset;
 }
