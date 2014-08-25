@@ -66,6 +66,7 @@
     self.placeholderLabel = [[UILabel alloc] init];
     self.placeholderLabel.textColor = [UIColor grayColor];
     self.placeholderLabel.backgroundColor = [UIColor clearColor];
+    self.placeholderLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     [self addSubview:self.placeholderLabel];
     
     // Create TextView

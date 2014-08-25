@@ -20,32 +20,36 @@ NSString *THContactPickerContactCellReuseID = @"THContactPickerContactCellReuseI
 @implementation THContactPickerViewController
 @synthesize contactPickerView = _contactPickerView;
 
+
+
+- (void) loadView {
+    UIView *rootView = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]];
+    self.view = rootView;
+    self.view.autoresizesSubviews = YES;
+    
+    // Fill the rest of the view with the table view
+    _tableView = [[UITableView alloc] initWithFrame:rootView.bounds
+                                                  style:UITableViewStylePlain];
+    _tableView.autoresizingMask = UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth;
+    [rootView addSubview:_tableView];
+    
+    // Initialize and add Contact Picker View
+    _contactPickerView = [[THContactPickerView alloc] initWithFrame:CGRectMake(0, 0, rootView.bounds.size.width, kPickerViewHeight)];
+    _contactPickerView.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin|UIViewAutoresizingFlexibleWidth;
+    [_contactPickerView setPlaceholderString:_placeholderString];
+    [rootView addSubview:_contactPickerView];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     if ([self respondsToSelector:@selector(edgesForExtendedLayout)]) {
         [self setEdgesForExtendedLayout:UIRectEdgeBottom|UIRectEdgeLeft|UIRectEdgeRight];
     }
-  
-    // Initialize and add Contact Picker View
-    _contactPickerView = [[THContactPickerView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, kPickerViewHeight)];
-    _contactPickerView.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin|UIViewAutoresizingFlexibleWidth;
-    _contactPickerView.delegate = self;
-    [_contactPickerView setPlaceholderString:_placeholderString];
-    [self.view addSubview:_contactPickerView];
-    
-    // Fill the rest of the view with the table view 
-    self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds
-                                                  style:UITableViewStylePlain];
-    self.tableView.autoresizingMask = UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth;
-    self.tableView.contentInset = UIEdgeInsetsMake(self.tableView.contentInset.top,
-                                                   self.tableView.contentInset.left,
-                                                   self.tableView.contentInset.bottom,
-                                                   self.tableView.contentInset.right);
     
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    [self.view insertSubview:self.tableView belowSubview:self.contactPickerView];
+    self.contactPickerView.delegate = self;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
