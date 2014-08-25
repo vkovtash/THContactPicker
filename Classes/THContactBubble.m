@@ -178,7 +178,10 @@
     
     self.isSelected = YES;
     
-    [self.textView becomeFirstResponder];
+    __block __typeof(&*self) weakSelf = self;
+    [UIView performWithoutAnimation:^{
+        [weakSelf.textView becomeFirstResponder];
+    }];
 }
 
 - (void)unSelect {
@@ -199,7 +202,10 @@
     [self setNeedsDisplay];
     self.isSelected = NO;
     
-    [self.textView resignFirstResponder];
+    __block __typeof(&*self) weakSelf = self;
+    [UIView performWithoutAnimation:^{
+        [weakSelf.textView resignFirstResponder];
+    }];
 }
 
 - (void)handleTapGesture {

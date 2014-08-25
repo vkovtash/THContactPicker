@@ -135,7 +135,13 @@
         return;
     }
     
-    self.textView.text = @"";
+    //hiding glitches on text changes
+    __block __typeof(&*self) weakSelf = self;
+    self.textView.alpha = 0;
+    [UIView animateWithDuration:0.25 animations:^{
+        weakSelf.textView.text = @"";
+        weakSelf.textView.alpha = 1;
+    }];
     
     THContactBubble *contactBubble = [[THContactBubble alloc] initWithName:name
                                                                      style:self.bubbleStyle
@@ -160,7 +166,6 @@
 
 - (void)selectTextView {
     self.textView.hidden = NO;
-    [self.textView becomeFirstResponder];
 }
 
 - (void)removeAllContacts
@@ -192,8 +197,7 @@
     
     // update layout
     [self layoutView];
-
-    [self.textView becomeFirstResponder];
+    
     self.textView.hidden = NO;
     self.textView.text = @"";
     
@@ -277,13 +281,17 @@
   // Remove contact from memory
   [self.contacts removeObjectForKey:contactKey];
   [self.contactKeys removeObject:contactKey];
-  
-  // update layout
-  [self layoutView];
-  
-  [self.textView becomeFirstResponder];
+    
+  __block __typeof(&*self) weakSelf = self;
+  [UIView performWithoutAnimation:^{
+      [weakSelf.textView becomeFirstResponder];
+  }];
+    
   self.textView.hidden = NO;
   self.textView.text = @"";
+    
+  // update layout
+  [self layoutView];
   
   [self scrollToBottomWithAnimation:NO];
 }
@@ -434,7 +442,6 @@
     }
     self.selectedContactBubble = contactBubble;
     
-    [self.textView resignFirstResponder];
     self.textView.text = @"";
     self.textView.hidden = YES;
 }
@@ -443,7 +450,6 @@
     if (self.selectedContactBubble != nil){
         
     }
-    [self.textView becomeFirstResponder];
     self.textView.text = @"";
     self.textView.hidden = NO;
 }
@@ -462,7 +468,6 @@
     
     // Show textField
     self.textView.hidden = NO;
-    [self.textView becomeFirstResponder];
     
     // Unselect contact bubble
     [self.selectedContactBubble unSelect];
