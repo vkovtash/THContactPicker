@@ -7,8 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "THContactPickerView.h"
+
+extern NSString *const THContactPickerContactCellReuseID;
 
 @interface THContactPickerViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
+@property (nonatomic, readonly) THContactPickerView *contactPickerView;
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSArray *contacts;
 @property (nonatomic, readonly) NSArray *selectedContacts;
@@ -18,6 +22,6 @@
 
 - (void)clearSelectedContacts:(id)sender;
 - (NSPredicate *)newFilteringPredicateWithText:(NSString *) text;
-- (void) didChangeSelectedItems;
-- (NSString *) titleForRowAtIndexPath:(NSIndexPath *)indexPath;
+- (void)didChangeSelectedItems;
+- (NSString *)titleForRowAtIndexPath:(NSIndexPath *)indexPath;
 @end
