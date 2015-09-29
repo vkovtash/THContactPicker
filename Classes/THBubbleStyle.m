@@ -10,13 +10,15 @@
 
 @implementation THBubbleStyle
 
-- (id)initWithTextColor:(UIColor *)textColor
-            gradientTop:(UIColor *)gradientTop
-         gradientBottom:(UIColor *)gradientBottom
-            borderColor:(UIColor *)borderColor
-             borderWith:(CGFloat) borderWidth
-     cornerRadiusFactor:(CGFloat) cornerRadiusFactor {
-    if (self = [super init]) {
+- (instancetype)initWithTextColor:(UIColor *)textColor
+                      gradientTop:(UIColor *)gradientTop
+                   gradientBottom:(UIColor *)gradientBottom
+                      borderColor:(UIColor *)borderColor
+                       borderWith:(CGFloat)borderWidth
+               cornerRadiusFactor:(CGFloat)cornerRadiusFactor {
+    self = [super init];
+    
+    if (self) {
         self.textColor = textColor;
         self.gradientTop = gradientTop;
         self.gradientBottom = gradientBottom;
