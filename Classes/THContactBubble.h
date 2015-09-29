@@ -22,17 +22,20 @@
 
 @interface THContactBubble : UIView <UITextViewDelegate, UITextInputTraits>
 
-@property (strong, nonatomic) NSString *name;
-@property (strong, nonatomic) UILabel *label;
-@property (strong, nonatomic) UITextView *textView; // used to capture keyboard touches when view is selected
-@property (assign, nonatomic) BOOL isSelected;
-@property (assign, nonatomic) id <THContactBubbleDelegate>delegate;
-@property (strong, nonatomic) CAGradientLayer *gradientLayer;
-@property (strong, nonatomic, setter=setBubbleStyle:) THBubbleStyle *style UI_APPEARANCE_SELECTOR;
-@property (strong, nonatomic) THBubbleStyle *selectedStyle UI_APPEARANCE_SELECTOR;
+@property (nonatomic, strong) NSString *name;
+@property (nonatomic, strong) UILabel *label;
+@property (nonatomic, strong) UITextView *textView; // used to capture keyboard touches when view is selected
+@property (nonatomic, assign) BOOL isSelected;
+@property (nonatomic, assign) id <THContactBubbleDelegate>delegate;
+@property (nonatomic, strong) CAGradientLayer *gradientLayer;
 
-- (instancetype)initWithName:(NSString *)name;
-- (instancetype)initWithName:(NSString *)name style:(THBubbleStyle *)style selectedStyle:(THBubbleStyle *)selectedStyle;
+@property (nonatomic, strong) THBubbleStyle *style;
+@property (nonatomic, strong) THBubbleStyle *selectedStyle;
+
+- (id)initWithName:(NSString *)name;
+- (id)initWithName:(NSString *)name
+             style:(THBubbleStyle *)style
+     selectedStyle:(THBubbleStyle *)selectedStyle;
 
 - (void)select;
 - (void)unSelect;

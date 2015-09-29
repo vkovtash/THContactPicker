@@ -10,7 +10,7 @@
 
 static const CGFloat kPickerViewHeight = 100.0;
 
-NSString *const THContactPickerContactCellReuseID = @"THContactPickerContactCellReuseID";
+NSString *THContactPickerContactCellReuseID = @"THContactPickerContactCellReuseID";
 
 @interface THContactPickerViewController () <THContactPickerDelegate>
 @property (nonatomic, strong) NSMutableArray *privateSelectedContacts;
@@ -20,7 +20,9 @@ NSString *const THContactPickerContactCellReuseID = @"THContactPickerContactCell
 @implementation THContactPickerViewController
 @synthesize contactPickerView = _contactPickerView;
 
-- (void)loadView {
+
+
+- (void) loadView {
     UIView *rootView = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]];
     self.view = rootView;
     self.view.autoresizesSubviews = YES;
@@ -86,7 +88,7 @@ NSString *const THContactPickerContactCellReuseID = @"THContactPickerContactCell
     return _filteredContacts;
 }
 
-- (void)setPlaceholderString:(NSString *)placeholderString {
+- (void) setPlaceholderString:(NSString *)placeholderString {
     _placeholderString = placeholderString;
     [self.contactPickerView setPlaceholderString:_placeholderString];
 }
@@ -99,21 +101,21 @@ NSString *const THContactPickerContactCellReuseID = @"THContactPickerContactCell
     self.tableView.scrollIndicatorInsets = self.tableView.contentInset;
 }
 
-- (NSInteger)selectedCount {
+- (NSInteger) selectedCount {
     return self.privateSelectedContacts.count;
 }
 
 #pragma mark - Publick methods
 
-- (NSPredicate *)newFilteringPredicateWithText:(NSString *)text {
+- (NSPredicate *)newFilteringPredicateWithText:(NSString *) text {
     return nil;
 }
 
-- (NSString *)titleForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (NSString *) titleForRowAtIndexPath:(NSIndexPath *)indexPath {
     return nil;
 }
 
-- (void)didChangeSelectedItems {
+- (void) didChangeSelectedItems {
     
 }
 
@@ -128,12 +130,14 @@ NSString *const THContactPickerContactCellReuseID = @"THContactPickerContactCell
 
 #pragma mark - Private methods
 
-- (void)adjustTableViewInsetTop:(CGFloat)topInset {
-    [self adjustTableViewInsetTop:topInset bottom:self.tableView.contentInset.bottom];
+- (void)adjustTableViewInsetTop:(CGFloat) topInset {
+    [self adjustTableViewInsetTop:topInset
+                           bottom:self.tableView.contentInset.bottom];
 }
 
-- (void)adjustTableViewInsetBottom:(CGFloat)bottomInset {
-    [self adjustTableViewInsetTop:self.tableView.contentInset.top bottom:bottomInset];
+- (void)adjustTableViewInsetBottom:(CGFloat) bottomInset {
+    [self adjustTableViewInsetTop:self.tableView.contentInset.top
+                           bottom:bottomInset];
 }
 
 - (void)adjustTableViewInsets {
@@ -156,14 +160,13 @@ NSString *const THContactPickerContactCellReuseID = @"THContactPickerContactCell
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:THContactPickerContactCellReuseID];
-    if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
-                                      reuseIdentifier:THContactPickerContactCellReuseID];
+    if (cell == nil){
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:THContactPickerContactCellReuseID];
     }
     
     [self configureCell:cell atIndexPath:indexPath];
     
-    if ([self.privateSelectedContacts containsObject:[self.filteredContacts objectAtIndex:indexPath.row]]) {
+    if ([self.privateSelectedContacts containsObject:[self.filteredContacts objectAtIndex:indexPath.row]]){
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
     } else {
         cell.accessoryType = UITableViewCellAccessoryNone;
@@ -184,8 +187,7 @@ NSString *const THContactPickerContactCellReuseID = @"THContactPickerContactCell
         cell.accessoryType = UITableViewCellAccessoryNone;
         [self.privateSelectedContacts removeObject:contact];
         [self.contactPickerView removeContact:contact];
-    }
-    else {
+    } else {
         // Contact has not been selected, add it to THContactPickerView
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
         [self.privateSelectedContacts addObject:contact];
@@ -202,8 +204,7 @@ NSString *const THContactPickerContactCellReuseID = @"THContactPickerContactCell
 - (void)contactPickerTextViewDidChange:(NSString *)textViewText {
     if ([textViewText isEqualToString:@""]){
         self.filteredContacts = self.contacts;
-    }
-    else {
+    } else {
         NSPredicate *predicate = [self newFilteringPredicateWithText:textViewText];
         self.filteredContacts = [self.contacts filteredArrayUsingPredicate:predicate];
     }
@@ -233,18 +234,39 @@ NSString *const THContactPickerContactCellReuseID = @"THContactPickerContactCell
 
 #pragma  mark - NSNotificationCenter
 
-- (void)keyboardDidShow:(NSNotification *)notification {
+- (void)keyboardDidShow:(NSNotification *) notification{
     NSDictionary* info = [notification userInfo];
-    CGRect kbRect = [self.view convertRect:[[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue]
-                                  fromView:self.view.window];
+    CGRect kbRect = [self.view convertRect:[[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue] fromView:self.view.window];
     [self adjustTableViewInsetBottom:self.view.bounds.size.height - kbRect.origin.y];
 }
 
-- (void)keyboardDidHide:(NSNotification *)notification {
+- (void)keyboardDidHide:(NSNotification *) notification{
     NSDictionary* info = [notification userInfo];
-    CGRect kbRect = [self.view convertRect:[[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue]
-                                  fromView:self.view.window];
+    CGRect kbRect = [self.view convertRect:[[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue] fromView:self.view.window];
     [self adjustTableViewInsetBottom:self.view.bounds.size.height - kbRect.origin.y];
 }
 
 @end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
