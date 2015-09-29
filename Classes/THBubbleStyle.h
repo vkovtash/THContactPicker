@@ -10,17 +10,17 @@
 
 @interface THBubbleStyle : NSObject
 
-@property (nonatomic, strong) UIColor *textColor;
-@property (nonatomic, strong) UIColor *gradientTop;
-@property (nonatomic, strong) UIColor *gradientBottom;
-@property (nonatomic, strong) UIColor *borderColor;
-@property (nonatomic, assign) CGFloat borderWidth;
-@property (nonatomic, assign) CGFloat cornerRadiusFactor;
+@property (strong, nonatomic) UIColor *textColor;
+@property (strong, nonatomic) UIColor *gradientTop;
+@property (strong, nonatomic) UIColor *gradientBottom;
+@property (strong, nonatomic) UIColor *borderColor;
+@property (assign, nonatomic) CGFloat borderWidth;
+@property (assign, nonatomic) CGFloat cornerRadiusFactor;
 
-- (id)initWithTextColor:(UIColor *)textColor
-            gradientTop:(UIColor *)gradientTop
-         gradientBottom:(UIColor *)gradientBottom
-            borderColor:(UIColor *)borderColor
-             borderWith:(CGFloat) borderWidth
-     cornerRadiusFactor:(CGFloat) cornerRadiusFactor;
+- (instancetype)initWithTextColor:(UIColor *)textColor
+                      gradientTop:(UIColor *)gradientTop
+                   gradientBottom:(UIColor *)gradientBottom
+                      borderColor:(UIColor *)borderColor
+                       borderWith:(CGFloat)borderWidth
+               cornerRadiusFactor:(CGFloat)cornerRadiusFactor;
 @end

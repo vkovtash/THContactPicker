@@ -31,7 +31,7 @@
 #define kVerticalPadding 4 // amount of padding above and below each contact bubble
 #define kTextViewMinWidth 130
 
-- (id)initWithCoder:(NSCoder *)aDecoder {
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self){
         [self setup];
@@ -39,14 +39,16 @@
     return self;
 }
 
-- (id)initWithFrame:(CGRect)frame
-{
+- (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        // Initialization code        
         [self setup];
     }
     return self;
+}
+
+- (instancetype)init {
+    return [self initWithFrame:CGRectMake(0, 0, 0, 0)];
 }
 
 - (void)setup {
@@ -56,22 +58,25 @@
     self.contactKeys = [NSMutableArray array];
     
     // Create a contact bubble to determine the height of a line
-    THContactBubble *contactBubble = [[THContactBubble alloc] initWithName:@"Sample"];
-    self.lineHeight = contactBubble.frame.size.height + 2 * kVerticalPadding;
-    
     self.scrollView = [[UIScrollView alloc] initWithFrame:self.bounds];
     self.scrollView.scrollsToTop = NO;
     self.scrollView.delegate = self;
     self.scrollView.autoresizingMask = UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth;
     [self addSubview:self.scrollView];
     
+    // Add placeholder label
+    self.placeholderLabel = [[UILabel alloc] init];
+    self.placeholderLabel.textColor = [UIColor grayColor];
+    self.placeholderLabel.backgroundColor = [UIColor clearColor];
+    self.placeholderLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    [self addSubview:self.placeholderLabel];
+    
     // Create TextView
     // It would make more sense to use a UITextField (because it doesnt wrap text), however, there is no easy way to detect the "delete" key press using a UITextField when there is no 
     self.textView = [[UITextView alloc] init];
     self.textView.delegate = self;
-    self.textView.font = contactBubble.label.font;
     self.textView.backgroundColor = [UIColor clearColor];
-    self.textView.contentInset = UIEdgeInsetsMake(-11, -6, 0, 0);
+    self.textView.textContainerInset = UIEdgeInsetsMake(2, 0, 0, 0);
     self.textView.scrollEnabled = NO;
     self.textView.scrollsToTop = NO;
     [self.textView becomeFirstResponder];
@@ -84,20 +89,35 @@
     [layer setShadowOpacity:1];
     [layer setShadowRadius:1.0f];
     
-    // Add placeholder label
-    self.placeholderLabel = [[UILabel alloc] initWithFrame:CGRectMake(8, self.viewPadding, self.frame.size.width, self.lineHeight)];
-    self.placeholderLabel.font = contactBubble.label.font;
-    self.placeholderLabel.textColor = [UIColor grayColor];
-    self.placeholderLabel.backgroundColor = [UIColor clearColor];
-    [self addSubview:self.placeholderLabel];
-    
     UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture)];
     tapGesture.numberOfTapsRequired = 1;
     tapGesture.numberOfTouchesRequired = 1;
     [self addGestureRecognizer:tapGesture];
+    
+    //default settings
+    THContactBubble *contactBubble = [[THContactBubble alloc] initWithName:@""];
+    self.bubbleStyle = contactBubble.style;
+    self.bubbleSelectedStyle = contactBubble.selectedStyle;
+    self.font = contactBubble.label.font;
 }
 
 #pragma mark - Public functions
+
+- (void)setPlaceholderTextColor:(UIColor *)placeholderColor {
+    self.placeholderLabel.textColor = placeholderColor;
+}
+
+- (UIColor *)placeholderTextColor {
+    return self.placeholderLabel.textColor;
+}
+
+- (UIColor *)textColor {
+    return self.textView.textColor;
+}
+
+- (void)setTextColor:(UIColor *)textColor {
+    self.textView.textColor = textColor;
+}
 
 - (void)disableDropShadow {
     CALayer *layer = [self layer];
@@ -116,7 +136,12 @@
     [self.textView sizeToFit];
     
     self.placeholderLabel.font = font;
-    self.placeholderLabel.frame = CGRectMake(8, self.viewPadding, self.frame.size.width, self.lineHeight);
+    self.placeholderLabel.frame = CGRectMake(6, self.viewPadding, self.frame.size.width, self.lineHeight);
+}
+
+- (void)setTintColor:(UIColor *)tintColor {
+    [super setTintColor:tintColor];
+    self.textView.tintColor = tintColor;
 }
 
 - (void)addContact:(id)contact withName:(NSString *)name {
@@ -126,11 +151,19 @@
         return;
     }
     
-    self.textView.text = @"";
+    //hiding glitches on text changes
+    __block __typeof(&*self) weakSelf = self;
+    self.textView.alpha = 0;
+    [UIView animateWithDuration:0.25 animations:^{
+        weakSelf.textView.text = @"";
+        weakSelf.textView.alpha = 1;
+    }];
     
     THContactBubble *contactBubble = [[THContactBubble alloc] initWithName:name
                                                                      style:self.bubbleStyle
                                                              selectedStyle:self.bubbleSelectedStyle];
+    
+    contactBubble.keyboardAppearance = self.keyboardAppearance;
     if (self.font != nil){
         [contactBubble setFont:self.font];
     }
@@ -149,11 +182,9 @@
 
 - (void)selectTextView {
     self.textView.hidden = NO;
-    [self.textView becomeFirstResponder];
 }
 
-- (void)removeAllContacts
-{
+- (void)removeAllContacts {
     for(id contact in [self.contacts allKeys]){
       THContactBubble *contactBubble = [self.contacts objectForKey:contact];
       [contactBubble removeFromSuperview];
@@ -166,7 +197,6 @@
   
     self.textView.hidden = NO;
     self.textView.text = @"";
-  
 }
 
 - (void)removeContact:(id)contact {
@@ -182,8 +212,7 @@
     
     // update layout
     [self layoutView];
-
-    [self.textView becomeFirstResponder];
+    
     self.textView.hidden = NO;
     self.textView.text = @"";
     
@@ -206,25 +235,11 @@
     [self layoutView];
 }
 
-- (void)setBubbleColor:(THBubbleStyle *)color selectedColor:(THBubbleStyle *)selectedColor {
-    self.bubbleStyle = color;
-    self.bubbleSelectedStyle = selectedColor;
-
-    for (id contactKey in self.contactKeys){
-        THContactBubble *contactBubble = (THContactBubble *)[self.contacts objectForKey:contactKey];
-
-        contactBubble.style = color;
-        contactBubble.selectedStyle = selectedColor;
-
-        // thid stuff reloads bubble
-        if (contactBubble.isSelected)
-            [contactBubble select];
-        else
-            [contactBubble unSelect];
-    }
-}
-
 #pragma mark - Private functions
+
+- (BOOL)becomeFirstResponder {
+    return [self.textView becomeFirstResponder];
+}
 
 - (void)scrollToBottomWithAnimation:(BOOL)animated {
     if (animated){
@@ -262,13 +277,17 @@
   // Remove contact from memory
   [self.contacts removeObjectForKey:contactKey];
   [self.contactKeys removeObject:contactKey];
-  
-  // update layout
-  [self layoutView];
-  
-  [self.textView becomeFirstResponder];
+    
+  __block __typeof(&*self) weakSelf = self;
+  [UIView performWithoutAnimation:^{
+      [weakSelf.textView becomeFirstResponder];
+  }];
+    
   self.textView.hidden = NO;
   self.textView.text = @"";
+    
+  // update layout
+  [self layoutView];
   
   [self scrollToBottomWithAnimation:NO];
 }
@@ -319,7 +338,8 @@
     
     // Now add a textView after the comment bubbles
     CGFloat minWidth = kTextViewMinWidth + 2 * kHorizontalPadding;
-    CGRect textViewFrame = CGRectMake(0, 0, self.textView.frame.size.width, self.lineHeight - 2 * kVerticalPadding);
+    CGFloat textViewHeight = self.lineHeight - 2 * kVerticalPadding;
+    CGRect textViewFrame = CGRectMake(0, 0, self.textView.frame.size.width, textViewHeight);
     // Check if we can add the text field on the same line as the last contact bubble
     if (self.frame.size.width - frameOfLastBubble.origin.x - frameOfLastBubble.size.width - minWidth >= 0){ // add to the same line
         textViewFrame.origin.x = frameOfLastBubble.origin.x + frameOfLastBubble.size.width + kHorizontalPadding;
@@ -334,7 +354,7 @@
         textViewFrame.size.width = self.frame.size.width - 2 * kHorizontalPadding;
     }
     self.textView.frame = textViewFrame;
-    self.textView.center = CGPointMake(self.textView.center.x, lineCount * self.lineHeight + self.lineHeight / 2 + kVerticalPadding + self.viewPadding);
+    self.textView.center = CGPointMake(self.textView.center.x, lineCount * self.lineHeight + textViewHeight / 2 + kVerticalPadding + self.viewPadding);
     
     // Add text view if it hasn't been added 
     if (self.textView.superview == nil){
@@ -380,8 +400,7 @@
 
 #pragma mark - UITextViewDelegate 
 
-- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text;
-{
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
     self.textView.hidden = NO;
     
     if ( [text isEqualToString:@"\n"] ) { // Return key was pressed
@@ -418,7 +437,6 @@
     }
     self.selectedContactBubble = contactBubble;
     
-    [self.textView resignFirstResponder];
     self.textView.text = @"";
     self.textView.hidden = YES;
 }
@@ -427,7 +445,6 @@
     if (self.selectedContactBubble != nil){
         
     }
-    [self.textView becomeFirstResponder];
     self.textView.text = @"";
     self.textView.hidden = NO;
 }
@@ -439,7 +456,7 @@
 #pragma mark - Gesture Recognizer
 
 - (void)handleTapGesture {
-    if (self.limitToOne && self.contactKeys.count == 1){
+    if (self.limitToOne && self.contactKeys.count == 1) {
         return;
     }
     [self scrollToBottomWithAnimation:YES];
@@ -462,13 +479,17 @@
     }
 }
 
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect
-{
-    // Drawing code
+#pragma mark - UITextInputTraits
+
+- (void)setKeyboardAppearance:(UIKeyboardAppearance)keyboardAppearance {
+    self.textView.keyboardAppearance = keyboardAppearance;
+    for (THContactBubble *bubble in self.contacts) {
+        bubble.keyboardAppearance = keyboardAppearance;
+    }
 }
-*/
+
+- (UIKeyboardAppearance)keyboardAppearance {
+    return self.textView.keyboardAppearance;
+}
 
 @end
