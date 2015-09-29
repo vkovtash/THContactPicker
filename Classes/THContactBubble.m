@@ -80,6 +80,7 @@
                                                borderWith:k7DefaultBorderWidth
                                        cornerRadiusFactor:k7DefaultCornerRadiusFactor];
     }
+    
     return _style;
 }
 
@@ -113,6 +114,8 @@
                                                cornerRadiusFactor:k7DefaultCornerRadiusFactor];
 
     }
+    
+    return _selectedStyle;
 }
 
 - (void)setSelectedStyle:(THBubbleStyle *)selectedStyle {
