@@ -31,7 +31,7 @@
 #define kVerticalPadding 4 // amount of padding above and below each contact bubble
 #define kTextViewMinWidth 130
 
-- (id)initWithCoder:(NSCoder *)aDecoder {
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self){
         [self setup];
@@ -39,14 +39,16 @@
     return self;
 }
 
-- (id)initWithFrame:(CGRect)frame
-{
+- (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        // Initialization code        
         [self setup];
     }
     return self;
+}
+
+- (instancetype)init {
+    return [self initWithFrame:CGRectMake(0, 0, 0, 0)];
 }
 
 - (void)setup {
@@ -101,12 +103,20 @@
 
 #pragma mark - Public functions
 
-- (void) setPlaceholderTextColor:(UIColor *)placeholderColor {
+- (void)setPlaceholderTextColor:(UIColor *)placeholderColor {
     self.placeholderLabel.textColor = placeholderColor;
 }
 
-- (UIColor *) placeholderTextColor {
+- (UIColor *)placeholderTextColor {
     return self.placeholderLabel.textColor;
+}
+
+- (UIColor *)textColor {
+    return self.textView.textColor;
+}
+
+- (void)setTextColor:(UIColor *)textColor {
+    self.textView.textColor = textColor;
 }
 
 - (void)disableDropShadow {
@@ -127,6 +137,11 @@
     
     self.placeholderLabel.font = font;
     self.placeholderLabel.frame = CGRectMake(6, self.viewPadding, self.frame.size.width, self.lineHeight);
+}
+
+- (void)setTintColor:(UIColor *)tintColor {
+    [super setTintColor:tintColor];
+    self.textView.tintColor = tintColor;
 }
 
 - (void)addContact:(id)contact withName:(NSString *)name {
@@ -169,8 +184,7 @@
     self.textView.hidden = NO;
 }
 
-- (void)removeAllContacts
-{
+- (void)removeAllContacts {
     for(id contact in [self.contacts allKeys]){
       THContactBubble *contactBubble = [self.contacts objectForKey:contact];
       [contactBubble removeFromSuperview];
@@ -221,28 +235,9 @@
     [self layoutView];
 }
 
-- (void)setBubbleStyle:(THBubbleStyle *)style selectedStyle:(THBubbleStyle *)selectedStyle {
-    self.bubbleStyle = style;
-    self.textView.textColor = style.textColor;
-    self.bubbleSelectedStyle = selectedStyle;
-
-    for (id contactKey in self.contactKeys){
-        THContactBubble *contactBubble = (THContactBubble *)[self.contacts objectForKey:contactKey];
-
-        contactBubble.style = style;
-        contactBubble.selectedStyle = selectedStyle;
-
-        // thid stuff reloads bubble
-        if (contactBubble.isSelected)
-            [contactBubble select];
-        else
-            [contactBubble unSelect];
-    }
-}
-
 #pragma mark - Private functions
 
-- (BOOL) becomeFirstResponder {
+- (BOOL)becomeFirstResponder {
     return [self.textView becomeFirstResponder];
 }
 
@@ -405,8 +400,7 @@
 
 #pragma mark - UITextViewDelegate 
 
-- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text;
-{
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
     self.textView.hidden = NO;
     
     if ( [text isEqualToString:@"\n"] ) { // Return key was pressed
@@ -462,13 +456,14 @@
 #pragma mark - Gesture Recognizer
 
 - (void)handleTapGesture {
-    if (self.limitToOne && self.contactKeys.count == 1){
+    if (self.limitToOne && self.contactKeys.count == 1) {
         return;
     }
     [self scrollToBottomWithAnimation:YES];
     
     // Show textField
     self.textView.hidden = NO;
+    [self.textView becomeFirstResponder];
     
     // Unselect contact bubble
     [self.selectedContactBubble unSelect];
@@ -486,14 +481,14 @@
 
 #pragma mark - UITextInputTraits
 
-- (void) setKeyboardAppearance:(UIKeyboardAppearance)keyboardAppearance {
+- (void)setKeyboardAppearance:(UIKeyboardAppearance)keyboardAppearance {
     self.textView.keyboardAppearance = keyboardAppearance;
     for (THContactBubble *bubble in self.contacts) {
         bubble.keyboardAppearance = keyboardAppearance;
     }
 }
 
-- (UIKeyboardAppearance) keyboardAppearance {
+- (UIKeyboardAppearance)keyboardAppearance {
     return self.textView.keyboardAppearance;
 }
 

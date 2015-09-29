@@ -21,12 +21,13 @@
 
 @interface THContactPickerView : UIView <UITextViewDelegate, THContactBubbleDelegate, UIScrollViewDelegate, UITextInputTraits>
 
-@property (nonatomic, strong) THContactBubble *selectedContactBubble;
-@property (nonatomic, assign) IBOutlet id <THContactPickerDelegate> delegate;
-@property (nonatomic, assign) BOOL limitToOne;
-@property (nonatomic, assign) CGFloat viewPadding;
-@property (nonatomic, strong) UIFont *font;
-@property (readwrite, nonatomic) UIColor *placeholderTextColor;
+@property (strong, nonatomic) THContactBubble *selectedContactBubble;
+@property (assign, nonatomic) IBOutlet id <THContactPickerDelegate> delegate;
+@property (assign, nonatomic) BOOL limitToOne;
+@property (assign, nonatomic) CGFloat viewPadding;
+@property (strong, nonatomic) UIFont *font UI_APPEARANCE_SELECTOR;
+@property (readwrite, nonatomic) UIColor *textColor UI_APPEARANCE_SELECTOR;
+@property (readwrite, nonatomic) UIColor *placeholderTextColor UI_APPEARANCE_SELECTOR;
 
 - (void)addContact:(id)contact withName:(NSString *)name;
 - (void)removeContact:(id)contact;
@@ -34,5 +35,4 @@
 - (void)setPlaceholderString:(NSString *)placeholderString;
 - (void)disableDropShadow;
 - (void)resignKeyboard;
-- (void)setBubbleStyle:(THBubbleStyle *)color selectedStyle:(THBubbleStyle *)selectedColor;
 @end
