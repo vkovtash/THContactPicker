@@ -33,7 +33,7 @@
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
-    if (self){
+    if (self) {
         [self setup];
     }
     return self;
@@ -94,11 +94,8 @@
     tapGesture.numberOfTouchesRequired = 1;
     [self addGestureRecognizer:tapGesture];
     
-    //default settings
-    THContactBubble *contactBubble = [[THContactBubble alloc] initWithName:@""];
-    self.bubbleStyle = contactBubble.style;
-    self.bubbleSelectedStyle = contactBubble.selectedStyle;
-    self.font = contactBubble.label.font;
+    _font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+    [self applyFontSettings];
 }
 
 #pragma mark - Public functions
@@ -127,16 +124,21 @@
 
 - (void)setFont:(UIFont *)font {
     _font = font;
+    [self applyFontSettings];
+}
+
+- (void)applyFontSettings {
     // Create a contact bubble to determine the height of a line
-    THContactBubble *contactBubble = [[THContactBubble alloc] initWithName:@"Sample"];
-    [contactBubble setFont:font];
-    self.lineHeight = contactBubble.frame.size.height + 2 * kVerticalPadding;
+    THContactBubble *contactBubble = [[THContactBubble alloc] initWithName:@"S"];
+    [contactBubble setFont:self.font];
+    self.lineHeight = CGRectGetHeight(contactBubble.bounds) + 2 * kVerticalPadding;
     
-    self.textView.font = font;
+    self.textView.font = self.font;
     [self.textView sizeToFit];
     
-    self.placeholderLabel.font = font;
+    self.placeholderLabel.font = self.font;
     self.placeholderLabel.frame = CGRectMake(6, self.viewPadding, self.frame.size.width, self.lineHeight);
+    [self layoutView];
 }
 
 - (void)setTintColor:(UIColor *)tintColor {
