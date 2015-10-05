@@ -51,6 +51,7 @@ NSString *const THContactPickerContactCellReuseID = @"THContactPickerContactCell
 }
 
 - (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
     [self adjustTableViewInsets];
     /*Register for keyboard notifications*/
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -65,6 +66,7 @@ NSString *const THContactPickerContactCellReuseID = @"THContactPickerContactCell
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
