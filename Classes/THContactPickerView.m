@@ -76,6 +76,7 @@
     self.textView = [[UITextView alloc] init];
     self.textView.delegate = self;
     self.textView.backgroundColor = [UIColor clearColor];
+    self.textView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     self.textView.textContainerInset = UIEdgeInsetsMake(2, 0, 0, 0);
     self.textView.scrollEnabled = NO;
     self.textView.scrollsToTop = NO;
