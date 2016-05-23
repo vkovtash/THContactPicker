@@ -83,7 +83,6 @@
     [self.textView becomeFirstResponder];
     
     // Add shadow to bottom border
-    self.backgroundColor = [UIColor whiteColor];
     CALayer *layer = [self layer];
     [layer setShadowColor:[[UIColor colorWithRed:225.0/255.0 green:226.0/255.0 blue:228.0/255.0 alpha:1] CGColor]];
     [layer setShadowOffset:CGSizeMake(0, 2)];
