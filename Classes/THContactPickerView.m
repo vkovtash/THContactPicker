@@ -128,15 +128,21 @@
 }
 
 - (void)applyFontSettings {
+    UIFont *currentFont = self.font;
+
     // Create a contact bubble to determine the height of a line
     THContactBubble *contactBubble = [[THContactBubble alloc] initWithName:@"S"];
-    [contactBubble setFont:self.font];
+    [contactBubble setFont:currentFont];
     self.lineHeight = CGRectGetHeight(contactBubble.bounds) + 2 * kVerticalPadding;
     
-    self.textView.font = self.font;
+    self.textView.font = currentFont;
     [self.textView sizeToFit];
+
+    for (THContactBubble *contactBubble in self.contacts.allValues) {
+        [contactBubble setFont:currentFont];
+    }
     
-    self.placeholderLabel.font = self.font;
+    self.placeholderLabel.font = currentFont;
     self.placeholderLabel.frame = CGRectMake(6, self.viewPadding, self.frame.size.width, self.lineHeight);
     [self layoutView];
 }
@@ -310,7 +316,7 @@
     int lineCount = 0;
     
     // Loop through selectedContacts and position/add them to the view
-    for (id contactKey in self.contactKeys){
+    for (id contactKey in self.contactKeys) {
         THContactBubble *contactBubble = (THContactBubble *)[self.contacts objectForKey:contactKey];
         CGRect bubbleFrame = contactBubble.frame;
 
