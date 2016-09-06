@@ -8,14 +8,29 @@
 
 #import "THContactPickerViewControllerDemo.h"
 
+@interface NSString(THContactProtocol) <THContactProtocol>
+@end
+
+@implementation NSString(THContactProtocol)
+
+- (id<NSCopying>)th_contactKey {
+    return self;
+}
+
+- (NSString *)th_contactTitle {
+    return self;
+}
+
+@end
+
+
 @interface THContactPickerViewControllerDemo ()
 
 @end
 
 @implementation THContactPickerViewControllerDemo
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
@@ -27,13 +42,13 @@
     return self;
 }
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
-    UIBarButtonItem * barButton = [[UIBarButtonItem alloc] initWithTitle:@"Remove All"
-                                                                   style:UIBarButtonItemStylePlain
-                                                                  target:self
-                                                                  action:@selector(clearSelectedContacts:)];
+    UIBarButtonItem * barButton =
+        [[UIBarButtonItem alloc] initWithTitle:@"Remove All"
+                                         style:UIBarButtonItemStylePlain
+                                        target:self
+                                        action:@selector(clearSelectedContacts:)];
     self.navigationItem.rightBarButtonItem = barButton;
     self.placeholderString  = @"Who are you with?";
 }
@@ -43,7 +58,7 @@
 }
 
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
-    cell.textLabel.text = [self.filteredContacts objectAtIndex:indexPath.row];
+    cell.textLabel.text = (NSString *)[self.filteredContacts objectAtIndex:indexPath.row];
 }
 
 @end
