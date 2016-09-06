@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = 'ZIMTHContactPicker'
-  s.version      = '0.3.4'
+  s.version      = '1.0.0'
   s.summary      = "Contact picker view controller"
   s.homepage     = 'https://github.com/vkovtash/THContactPicker'
 
