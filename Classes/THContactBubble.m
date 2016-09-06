@@ -15,16 +15,6 @@
 #define kDefaultBorderWidth 1
 #define kDefaultCornerRadiusFactor 2
 
-#define kColorText [UIColor blackColor]
-#define kColorGradientTop [UIColor colorWithRed:219.0/255.0 green:229.0/255.0 blue:249.0/255.0 alpha:1.0]
-#define kColorGradientBottom [UIColor colorWithRed:188.0/255.0 green:205.0/255.0 blue:242.0/255.0 alpha:1.0]
-#define kColorBorder [UIColor colorWithRed:127.0/255.0 green:127.0/255.0 blue:218.0/255.0 alpha:1.0]
-
-#define kColorSelectedText [UIColor whiteColor]
-#define kColorSelectedGradientTop [UIColor colorWithRed:79.0/255.0 green:132.0/255.0 blue:255.0/255.0 alpha:1.0]
-#define kColorSelectedGradientBottom [UIColor colorWithRed:73.0/255.0 green:58.0/255.0 blue:242.0/255.0 alpha:1.0]
-#define kColorSelectedBorder [UIColor colorWithRed:56.0/255.0 green:0/255.0 blue:233.0/255.0 alpha:1.0]
-
 #define k7DefaultBorderWidth 0
 #define k7DefaultCornerRadiusFactor 6
 
@@ -61,26 +51,14 @@
     if (_style) {
         return _style;
     }
-    
-    if ([[[UIDevice currentDevice] systemVersion] compare:@"7" options:NSNumericSearch] == NSOrderedAscending) {
-        //iOS verson less than 7
-        _style = [[THBubbleStyle alloc] initWithTextColor:kColorText
-                                              gradientTop:kColorGradientTop
-                                           gradientBottom:kColorGradientBottom
-                                              borderColor:kColorBorder
-                                               borderWith:kDefaultBorderWidth
-                                       cornerRadiusFactor:kDefaultCornerRadiusFactor];
-    }
-    else {
-        // iOS 7 and later
-        _style = [[THBubbleStyle alloc] initWithTextColor:k7ColorText
-                                              gradientTop:k7ColorGradientTop
-                                           gradientBottom:k7ColorGradientBottom
-                                              borderColor:k7ColorBorder
-                                               borderWith:k7DefaultBorderWidth
-                                       cornerRadiusFactor:k7DefaultCornerRadiusFactor];
-    }
-    
+
+    _style = [[THBubbleStyle alloc] initWithTextColor:k7ColorText
+                                          gradientTop:k7ColorGradientTop
+                                       gradientBottom:k7ColorGradientBottom
+                                          borderColor:k7ColorBorder
+                                           borderWith:k7DefaultBorderWidth
+                                   cornerRadiusFactor:k7DefaultCornerRadiusFactor];
+
     return _style;
 }
 
@@ -93,28 +71,15 @@
     if (_selectedStyle) {
         return _selectedStyle;
     }
-    
-    if ([[[UIDevice currentDevice] systemVersion] compare:@"7" options:NSNumericSearch] == NSOrderedAscending) {
-        //iOS verson less than 7
-        _selectedStyle = [[THBubbleStyle alloc] initWithTextColor:kColorSelectedText
-                                                      gradientTop:kColorSelectedGradientTop
-                                                   gradientBottom:kColorSelectedGradientBottom
-                                                      borderColor:kColorSelectedBorder
-                                                       borderWith:kDefaultBorderWidth
-                                               cornerRadiusFactor:kDefaultCornerRadiusFactor];
-    }
-    
-    else {
-        // iOS 7 and later
-        _selectedStyle = [[THBubbleStyle alloc] initWithTextColor:k7ColorSelectedText
-                                                      gradientTop:k7ColorSelectedGradientTop
-                                                   gradientBottom:k7ColorSelectedGradientBottom
-                                                      borderColor:k7ColorSelectedBorder
-                                                       borderWith:k7DefaultBorderWidth
-                                               cornerRadiusFactor:k7DefaultCornerRadiusFactor];
 
-    }
-    
+    _selectedStyle = [[THBubbleStyle alloc] initWithTextColor:k7ColorSelectedText
+                                                  gradientTop:k7ColorSelectedGradientTop
+                                               gradientBottom:k7ColorSelectedGradientBottom
+                                                  borderColor:k7ColorSelectedBorder
+                                                   borderWith:k7DefaultBorderWidth
+                                           cornerRadiusFactor:k7DefaultCornerRadiusFactor];
+
+
     return _selectedStyle;
 }
 

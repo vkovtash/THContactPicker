@@ -13,15 +13,17 @@ extern NSString *const THContactPickerContactCellReuseID;
 
 @interface THContactPickerViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic, readonly) THContactPickerView *contactPickerView;
-@property (nonatomic, strong) UITableView *tableView;
-@property (nonatomic, strong) NSArray *contacts;
-@property (nonatomic, readonly) NSArray *selectedContacts;
-@property (nonatomic) NSInteger selectedCount;
-@property (nonatomic, readonly) NSArray *filteredContacts;
 @property (strong, nonatomic) NSString *placeholderString;
+@property (nonatomic, weak) UITableView *tableView;
+@property (nonatomic, strong) NSArray<id<THContactProtocol>> *contacts;
+@property (nonatomic, readonly) NSArray<id<THContactProtocol>> *selectedContacts;
+@property (nonatomic, readonly) NSArray<id<THContactProtocol>> *filteredContacts;
+@property (nonatomic) NSInteger selectedCount;
 
 - (void)clearSelectedContacts:(id)sender;
-- (NSPredicate *)newFilteringPredicateWithText:(NSString *) text;
+
+#pragma mark - Methods to override
+- (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath;
+- (NSPredicate *)newFilteringPredicateWithText:(NSString *)text;
 - (void)didChangeSelectedItems;
-- (NSString *)titleForRowAtIndexPath:(NSIndexPath *)indexPath;
 @end
