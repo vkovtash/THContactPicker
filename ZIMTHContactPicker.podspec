@@ -1,11 +1,11 @@
 Pod::Spec.new do |s|
   s.name         = 'ZIMTHContactPicker'
-  s.version      = '1.0.0'
+  s.version      = '1.0.1'
   s.summary      = "Contact picker view controller"
   s.homepage     = 'https://github.com/vkovtash/THContactPicker'
 
   s.license      = 'MIT'
-  s.author       = { 'Tristan Himmelman' => '' }
+  s.author       = { 'Vlad Kovtash' => 'v.kovtash@gmail.com' }
   s.source       = { :git => 'https://github.com/vkovtash/THContactPicker.git', :tag => s.version.to_s }
 
   s.platform     = :ios, '7.0'
